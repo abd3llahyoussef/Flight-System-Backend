@@ -1,0 +1,150 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String?
+  name      String
+  googleId  String?   @unique
+  tickets   Ticket[]
+  reservations Reservation[]
+  dependants Dependant[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  passport  String?
+  nationality String?
+  isVerified  Boolean   @default(false)
+  verificationToken String?
+}
+
+model Airport {
+  id           Int      @id @default(autoincrement())
+  code         String   @unique
+  name         String
+  city         String
+  country      String
+  departures   Flight[] @relation("DepartureAirport")
+  arrivals     Flight[] @relation("ArrivalAirport")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Airplane {
+  id             Int      @id @default(autoincrement())
+  model          String
+  totalSeats     Int
+  economySeats   Int
+  businessSeats  Int
+  flights        Flight[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Flight {
+  id                  Int      @id @default(autoincrement())
+  flightNumber        String   @unique
+  airline             String   @default("Aurora Air")
+  stops               Int      @default(0)
+  departureAirportId  Int
+  arrivalAirportId    Int
+  airplaneId          Int
+  departureTime       DateTime
+  arrivalTime         DateTime
+  basePrice           Float
+  status              FlightStatus @default(SCHEDULED)
+  
+  departureAirport    Airport  @relation("DepartureAirport", fields: [departureAirportId], references: [id])
+  arrivalAirport      Airport  @relation("ArrivalAirport", fields: [arrivalAirportId], references: [id])
+  airplane            Airplane @relation(fields: [airplaneId], references: [id])
+  tickets             Ticket[]
+  reservations        Reservation[]
+  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model Ticket {
+  id         Int           @id @default(autoincrement())
+  userId     Int
+  flightId   Int
+  seatNumber String
+  seatClass  SeatClass     @default(ECONOMY)
+  price      Float
+  status     TicketStatus  @default(PENDING_PAYMENT)
+  paymentId  String?
+  
+  user       User          @relation(fields: [userId], references: [id])
+  flight     Flight        @relation(fields: [flightId], references: [id])
+  
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  dependants Dependant[]
+
+  @@unique([flightId, seatNumber])
+}
+
+model Dependant {
+  id           Int      @id @default(autoincrement())
+  userId       Int      // Relation to the main User
+  ticketId     Int      // Relation to the specific Ticket/Booking
+  name         String
+  email        String?
+  seatNumber   String
+  dob          String?
+  gender       String?
+  nationality  String?
+  passport     String?
+  
+  user         User     @relation(fields: [userId], references: [id])
+  ticket       Ticket   @relation(fields: [ticketId], references: [id])
+}
+
+model Reservation {
+  id            Int      @id @default(autoincrement())
+  reference     String   @unique
+  userId        Int
+  flightId      Int
+  seatClass     SeatClass @default(ECONOMY)
+  totalPrice    Float
+  status        String    @default("HELD") // HELD, EXPIRED, CONFIRMED
+  leadFirstName String
+  leadLastName  String
+  leadEmail     String
+  leadPhone     String
+  passengers    Json?     // Detailed passenger info including dependants
+  
+  user          User     @relation(fields: [userId], references: [id])
+  flight        Flight   @relation(fields: [flightId], references: [id])
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+enum FlightStatus {
+  SCHEDULED
+  DELAYED
+  DEPARTED
+  ARRIVED
+  CANCELLED
+}
+
+enum TicketStatus {
+  PENDING_PAYMENT
+  BOOKED
+  CANCELLED
+}
+
+enum SeatClass {
+  ECONOMY
+  PREMIUM
+  BUSINESS
+  FIRST
+}
