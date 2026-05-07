@@ -54,7 +54,7 @@ export class FlightsService {
       },
     });
 
-    return flights.map(f => this.formatFlight(f));
+    return flights.map((f: any) => this.formatFlight(f));
   }
 
   async findMany(id: number) {

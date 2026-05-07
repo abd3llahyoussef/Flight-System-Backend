@@ -59,17 +59,13 @@ let AuthService = class AuthService {
     }
     async validateUser(email, pass) {
         const user = await this.usersService.findOne({ email });
-        console.log('Validating user:', email);
         if (!user) {
-            console.log('User not found');
             return null;
         }
         if (!user.password) {
-            console.log('User has no password (possibly a Google account)');
             return null;
         }
         const isMatch = await bcrypt.compare(pass, user.password);
-        console.log('Password match:', isMatch);
         if (isMatch) {
             const { password, ...result } = user;
             return result;

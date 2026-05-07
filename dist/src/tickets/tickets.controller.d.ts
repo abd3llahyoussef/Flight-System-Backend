@@ -9,18 +9,7 @@ interface RequestWithUser extends Request {
 export declare class TicketsController {
     private ticketsService;
     constructor(ticketsService: TicketsService);
-    book(req: RequestWithUser, body: any): Promise<{
-        createdAt: Date;
-        updatedAt: Date;
-        id: number;
-        status: import("@prisma/client").$Enums.TicketStatus;
-        seatNumber: string;
-        seatClass: import("@prisma/client").$Enums.SeatClass;
-        price: number;
-        paymentId: string | null;
-        flightId: number;
-        userId: number;
-    }>;
+    book(req: RequestWithUser, body: any): Promise<any>;
     getMyTickets(req: RequestWithUser): Promise<{
         id: any;
         ref: any;
@@ -67,7 +56,7 @@ export declare class TicketsController {
         seatClass: any;
         dependants: any;
     }>;
-    getReservedSeats(flightId: number): Promise<string[]>;
+    getReservedSeats(flightId: number): Promise<any[]>;
     handleWebhook(body: any): Promise<{
         createdAt: Date;
         updatedAt: Date;

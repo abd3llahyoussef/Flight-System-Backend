@@ -46,7 +46,7 @@ export class ReservationsService {
       },
       orderBy: { createdAt: 'desc' },
     });
-    return reservations.map(r => this.formatReservation(r));
+    return reservations.map((r: any) => this.formatReservation(r));
   }
 
   async lookup(ref: string, lastName: string) {

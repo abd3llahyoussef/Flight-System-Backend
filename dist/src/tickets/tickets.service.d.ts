@@ -4,18 +4,7 @@ export declare class TicketsService {
     private prisma;
     private stripeService;
     constructor(prisma: PrismaService, stripeService: StripeService);
-    createBooking(userId: number, flightId: number, seatNumber: string, seatClass: string, passport?: string, nationality?: string, dependants?: any[]): Promise<{
-        createdAt: Date;
-        updatedAt: Date;
-        id: number;
-        status: import("@prisma/client").$Enums.TicketStatus;
-        seatNumber: string;
-        seatClass: import("@prisma/client").$Enums.SeatClass;
-        price: number;
-        paymentId: string | null;
-        flightId: number;
-        userId: number;
-    }>;
+    createBooking(userId: number, flightId: number, seatNumber: string, seatClass: string, passport?: string, nationality?: string, dependants?: any[]): Promise<any>;
     confirmPayment(paymentId: string): Promise<{
         createdAt: Date;
         updatedAt: Date;
@@ -75,5 +64,5 @@ export declare class TicketsService {
         seatClass: any;
         dependants: any;
     }>;
-    getReservedSeats(flightId: number): Promise<string[]>;
+    getReservedSeats(flightId: number): Promise<any[]>;
 }

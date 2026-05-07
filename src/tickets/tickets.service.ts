@@ -23,7 +23,7 @@ export class TicketsService {
     dependants: any[] = [],
   ) {
     try {
-      return await this.prisma.$transaction(async (tx) => {
+      return await this.prisma.$transaction(async (tx: any) => {
         // 1. Check if flight exists
         const flight = await tx.flight.findUnique({
           where: { id: flightId },
@@ -197,7 +197,7 @@ export class TicketsService {
       orderBy: { createdAt: 'desc' },
     });
 
-    return tickets.map((t) => this.formatTicket(t));
+    return tickets.map((t: any) => this.formatTicket(t));
   }
 
   async lookupByReference(ref: string, lastName: string) {
@@ -267,9 +267,9 @@ export class TicketsService {
       },
     });
 
-    const mainSeats = tickets.map((t) => t.seatNumber);
-    const dependantSeats = tickets.flatMap((t) =>
-      t.dependants.map((d) => d.seatNumber),
+    const mainSeats = tickets.map((t: any) => t.seatNumber);
+    const dependantSeats = tickets.flatMap((t: any) =>
+      t.dependants.map((d: any) => d.seatNumber),
     );
 
     return [...mainSeats, ...dependantSeats];

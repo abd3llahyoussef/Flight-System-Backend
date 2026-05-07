@@ -10,17 +10,17 @@ export declare class AdminController {
             cancellations: number;
         };
         flights: {
-            code: string;
+            code: any;
             route: string;
-            dep: string;
+            dep: any;
             status: string;
             load: number;
         }[];
         bookings: {
-            ref: string;
-            name: string;
+            ref: any;
+            name: any;
             route: string;
-            amount: number;
+            amount: any;
             status: string;
         }[];
     }>;

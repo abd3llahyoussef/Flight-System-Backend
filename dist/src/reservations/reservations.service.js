@@ -56,7 +56,7 @@ let ReservationsService = class ReservationsService {
             },
             orderBy: { createdAt: 'desc' },
         });
-        return reservations.map(r => this.formatReservation(r));
+        return reservations.map((r) => this.formatReservation(r));
     }
     async lookup(ref, lastName) {
         const reservation = await this.prisma.reservation.findFirst({

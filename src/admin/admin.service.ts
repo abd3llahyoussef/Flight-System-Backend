@@ -74,7 +74,7 @@ export class AdminService {
       CANCELLED: 'Cancelled'
     };
 
-    const flights = flightsRaw.map(f => {
+    const flights = flightsRaw.map((f: any) => {
       const load = f.airplane && f.airplane.totalSeats > 0 
         ? Math.round((f.tickets.length / f.airplane.totalSeats) * 100) 
         : 0;
@@ -102,7 +102,7 @@ export class AdminService {
       }
     });
 
-    const bookings = recentTickets.map(t => {
+    const bookings = recentTickets.map((t: any) => {
       const ref = t.paymentId || `AW-${t.id + 100000}`;
       return {
         ref,

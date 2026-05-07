@@ -60,7 +60,7 @@ let FlightsService = class FlightsService {
                 airplane: true,
             },
         });
-        return flights.map(f => this.formatFlight(f));
+        return flights.map((f) => this.formatFlight(f));
     }
     async findMany(id) {
         return this.prisma.flight.findFirst({
